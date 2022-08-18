@@ -1,0 +1,38 @@
+
+<div class="row">
+  <aside class="col-md-4">
+    <section class="user_info">
+      <h1 class="name">
+         <%= @user.name %>
+        <br>  
+        <br>
+      </h1>
+      <div id="adminka" class="text-danger">
+          <% if @user.admin? %>
+          <h3 >You have an admin power...</h3>
+        <% end %>
+      </div>
+      <br><br> <h4></h4>
+    </section>
+    </aside>
+  <div class="col-md-8">
+    <% if @user.microposts.any? %>
+      <h3>Microposts (<%= @user.microposts.count %>)</h3>
+      <ol class="microposts">
+        <%@user.microposts.each do |i|%>
+       <li class="content"  > <%= Micropost.find_by(user_id: @user.id, id: i).content %>
+       <span class="timestamp">
+       Posted <%= time_ago_in_words(Micropost.find_by(user_id: @user.id, id: i).created_at) %> ago.
+    <% if current_user==@user%>
+      <%= link_to "delete", @micropost=Micropost.find_by(user_id: @user.id, id: i), method: :delete,
+                                       data: { confirm: "You sure?" } %>
+    <% end %>
+    
+      </span>
+      </li>
+      <% end %>
+      </ol>
+      <%= will_paginate @microposts %>
+    <% end %>
+  </div>
+</div>
